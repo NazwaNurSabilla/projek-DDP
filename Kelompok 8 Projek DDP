@@ -1,0 +1,56 @@
+import tkinter as tk
+from tkinter import messagebox
+
+class KalkulatorZakatMal:
+    def __init__(self, root):
+        self.root = root
+        self.root.title("Kalkulator Zakat Mal")
+        self.root.geometry("400x250")
+        self.root.resizable(False, False)
+
+        self.label_jenis_harta = tk.Label(root, text="Jenis Harta:")
+        self.label_jenis_harta.pack(anchor="w", padx=10, pady=(10, 0))
+
+        self.jenis_harta_var = tk.StringVar()
+        self.jenis_harta_var.set("Uang Tunai")  # Default jenis harta
+
+        jenis_harta_options = ["Uang Tunai", "Emas/Perak", "Hasil Pertanian", "Hewan Ternak", "Perdagangan/Bisnis", "Harta Keuangan/Investasi", "Properti/Real Estate"]
+        self.option_menu = tk.OptionMenu(root, self.jenis_harta_var, *jenis_harta_options)
+        self.option_menu.pack(anchor="w", padx=10)
+
+        self.label_kekayaan = tk.Label(root, text="Jumlah Harta (IDR):")
+        self.label_kekayaan.pack(anchor="w", padx=10, pady=(10, 0))
+
+        self.entry_kekayaan = tk.Entry(root)
+        self.entry_kekayaan.pack(anchor="w", padx=10)
+
+        self.label_nisab = tk.Label(root, text="Nisab per Tahun (IDR): Rp 81,945,667")
+        self.label_nisab.pack(anchor="w", padx=10, pady=(10, 0))
+
+        self.button_hitung = tk.Button(root, text="Hitung Zakat", command=self.hitung_zakat)
+        self.button_hitung.pack(anchor="w", padx=10, pady=(10, 0))
+
+    def hitung_zakat(self):
+        try:
+            jenis_harta = self.jenis_harta_var.get()
+            nilai_kekayaan = float(self.entry_kekayaan.get())
+            nisab = 81945667  # Nisab per tahun
+
+            # Logika perhitungan zakat sesuai jenis harta
+            if nilai_kekayaan < nisab:
+                messagebox.showinfo("Informasi", f"Maaf, jumlah harta Anda belum mencapai nisab untuk membayar zakat.")
+            else:
+                if jenis_harta == "Uang Tunai" or jenis_harta == "Emas/Perak" or jenis_harta == "Hasil Pertanian":
+                    zakat = nilai_kekayaan * 0.025  # 2.5% dari nilai kekayaan
+                else:
+                    # Tambahkan logika perhitungan untuk jenis harta lainnya
+                    zakat = 0  # Default untuk jenis harta lain
+
+                messagebox.showinfo("Hasil Perhitungan", f"Jumlah Zakat Mal yang Harus Dibayarkan untuk {jenis_harta}: IDR {zakat:,.2f}")
+        except ValueError:
+            messagebox.showerror("Error", "Masukkan nilai kekayaan yang valid.")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    app = KalkulatorZakatMal(root)
+    root.mainloop()
